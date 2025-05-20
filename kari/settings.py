@@ -25,6 +25,11 @@ ALLOWED_HOSTS = ['.railway.app', 'localhost']
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://web-production-3a083.up.railway.app',
+]
+
+
 
 # Application definition
 STATIC_ROOT = BASE_DIR / 'staticfiles'
@@ -130,4 +135,6 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'home'
+LOGIN_URL = 'login'
