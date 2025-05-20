@@ -1,0 +1,207 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block title %}Викторина о ресторане{% endblock %}
+{% block content %}
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            min-height: 100vh;
+        }
+        .page-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: calc(100vh - 60px);
+            padding: 20px;
+        }
+        .content {
+            max-width: 900px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            box-sizing: border-box;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        .question {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+        input[type="radio"], input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        .option {
+            margin-bottom: 10px;
+        }
+        .btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #e76f51;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #f4a261;
+        }
+        .link {
+            text-align: center;
+            margin-top: 10px;
+        }
+        .link a {
+            color: #e76f51;
+            text-decoration: none;
+        }
+        .link a:hover {
+            text-decoration: underline;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e9f5e9;
+            color: #2e7d32;
+            border: 1px solid #c8e6c9;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .error {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #ffebee;
+            color: #c62828;
+            border: 1px solid #ef9a9a;
+            border-radius: 8px;
+            text-align: center;
+        }
+    </style>
+    <div class="page-wrapper">
+        <div class="content">
+            <h2>Викторина о ресторане</h2>
+            <form id="quiz-form">
+                <div class="question">
+                    <p>1. Какое блюдо является нашим фирменным?</p>
+                    <div class="option"><input type="radio" name="q1" value="pizza"> Пицца</div>
+                    <div class="option"><input type="radio" name="q1" value="steak"> Стейк</div>
+                    <div class="option"><input type="radio" name="q1" value="sushi"> Суши</div>
+                </div>
+                <div class="question">
+                    <p>2. Какие блюда подходят для вегетарианцев? (Выберите несколько)</p>
+                    <div class="option"><input type="checkbox" name="q2" value="salad"> Салаты</div>
+                    <div class="option"><input type="checkbox" name="q2" value="vegetarian_pizza"> Вегетарианская пицца</div>
+                    <div class="option"><input type="checkbox" name="q2" value="grilled_steak"> Стейк на гриле</div>
+                </div>
+                <div class="question">
+                    <p>3. Сколько минут в среднем занимает доставка?</p>
+                    <input type="text" name="q3" placeholder="Введите время в минутах">
+                </div>
+                <div class="question">
+                    <p>4. Какой ваш любимый десерт?</p>
+                    <input type="text" name="q4" placeholder="Напишите название десерта">
+                </div>
+                <div class="question">
+                    <p>5. Какой напиток чаще всего заказывают в ресторане?</p>
+                    <select name="q5">
+                        <option value="">Выберите...</option>
+                        <option value="cola">Кола</option>
+                        <option value="tea">Чай</option>
+                        <option value="coffee">Кофе</option>
+                    </select>
+                </div>
+                   <p>6. В какое время дня вы чаще всего заказываете еду?</p>
+                    <div class="option"><input type="radio" name="q6" value="morning"> Утро</div>
+                    <div class="option"><input type="radio" name="q6" value="afternoon"> День</div>
+                    <div class="option"><input type="radio" name="q6" value="evening"> Вечер</div>
+
+                <div class="question">
+                    <p>7. Как вы узнали о нашем ресторане?</p>
+                    <input type="text" name="q7" placeholder="Напишите ваш ответ">
+                </div>
+                <div class="question">
+                    <p>8. Как часто вы заказываете у нас еду?</p>
+                    <div class="option"><input type="radio" name="q8" value="weekly"> Еженедельно</div>
+                    <div class="option"><input type="radio" name="q8" value="monthly"> Ежемесячно</div>
+                    <div class="option"><input type="radio" name="q8" value="rarely"> Редко</div>
+                </div>
+                <div class="question">
+                    <p>9. Что вам больше всего нравится в нашем меню?</p>
+                    <input type="text" name="q9" placeholder="Ваш ответ">
+                </div>
+                <div class="question">
+                    <p>10. Есть ли у вас пожелания для улучшения нашего сервиса?</p>
+                    <textarea name="q10" rows="4" placeholder="Напишите ваш отзыв"></textarea>
+                </div>
+
+                <button type="button" class="btn" onclick="validateAndShowResult()">Отправить</button>
+            </form>
+            <div class="result" id="result-box">
+                <p id="personalized-result"></p>
+            </div>
+            <div class="error" id="error-box" style="display: none;">
+                <p>Пожалуйста, заполните все обязательные поля перед отправкой.</p>
+            </div>
+            <div class="link">
+                <p><a href="{% url 'home' %}">Вернуться на главную</a></p>
+            </div>
+        </div>
+    </div>
+    <script>
+        function validateAndShowResult() {
+            const form = document.getElementById('quiz-form');
+            const resultBox = document.getElementById('result-box');
+            const errorBox = document.getElementById('error-box');
+            const resultText = document.getElementById('personalized-result');
+
+            const q1 = form.q1.value;
+            const q2 = Array.from(form.q2).some(input => input.checked);
+            const q3 = form.q3.value.trim();
+            const q4 = form.q4.value.trim();
+            const q5 = form.q5.value;
+            const q6 = form.q6.value;
+            const q7 = form.q7.value.trim();
+            const q8 = form.q8.value;
+            const q9 = form.q9.value.trim();
+            const q10 = form.q10.value.trim();
+
+            if (!q1 || !q2 || !q3 || !q4 || !q5 || !q6 || !q7 || !q8 || !q9 || !q10) {
+                errorBox.style.display = 'block';
+                resultBox.style.display = 'none';
+                return;
+            }
+
+            errorBox.style.display = 'none';
+            let message = "Спасибо за участие в викторине!";
+
+            if (q1 === 'pizza') {
+                message += " Вы выбрали Пиццу как наше фирменное блюдо. Это отличный выбор для любителей итальянской кухни!";
+            } else if (q1 === 'steak') {
+                message += " Вы выбрали Стейк как наше фирменное блюдо. Это прекрасный выбор для ценителей сочного мяса!";
+            } else if (q1 === 'sushi') {
+                message += " Вы выбрали Суши как наше фирменное блюдо. Это замечательный выбор для любителей японской кухни!";
+            }
+
+            if (q5 === 'cola') {
+                message += " Чаще всего вы заказываете Колу. Освежающий выбор!";
+            } else if (q5 === 'tea') {
+                message += " Чаще всего вы заказываете Чай. Это уютный выбор!";
+            } else if (q5 === 'coffee') {
+                message += " Чаще всего вы заказываете Кофе. Отличный выбор для бодрости!";
+            }
+
+            resultText.textContent = message;
+            resultBox.style.display = 'block';
+        }
+    </script>
+{% endblock %}

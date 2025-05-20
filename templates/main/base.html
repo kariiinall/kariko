@@ -1,0 +1,360 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru" id="html-theme">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>{% block title %}Crispy Kitchen{% endblock %}</title>
+
+    <!-- CSS FILES -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/bootstrap-icons.css' %}" rel="stylesheet">
+    <link href="{% static 'css/tooplate-crispy-kitchen.css' %}" rel="stylesheet">
+    <!-- Добавляем кастомные стили для тем -->
+    <style>
+        :root {
+            /* Светлая тема (по умолчанию) */
+            --primary-bg: #fff;
+            --secondary-bg: #f8f9fa;
+            --text-color: #333;
+            --primary-color: #dc3545;
+            --button-text: #fff;
+            --navbar-bg: #fff;
+            --navbar-text: #333;
+            --footer-bg: #212529;
+            --footer-text: #fff;
+            --section-bg: #fff;
+            --section-text: #333;
+            --overlay-bg: rgba(0, 0, 0, 0.5);
+            --hero-text: #fff;
+            --menu-tag-bg: #ffc107;
+            --price-tag-bg: #fff;
+            --news-tag-bg: #dc3545;
+        }
+
+        [data-theme="dark"] {
+            /* Темная тема */
+            --primary-bg: #212529;
+            --secondary-bg: #343a40;
+            --text-color: #e9ecef;
+            --primary-color: #ff6b6b;
+            --button-text: #fff;
+            --navbar-bg: #343a40;
+            --navbar-text: #e9ecef;
+            --footer-bg: #1a1d20;
+            --footer-text: #e9ecef;
+            --section-bg: #2c3034;
+            --section-text: #e9ecef;
+            --overlay-bg: rgba(0, 0, 0, 0.7);
+            --hero-text: #e9ecef;
+            --menu-tag-bg: #ffca2c;
+            --price-tag-bg: #343a40;
+            --news-tag-bg: #ff6b6b;
+        }
+
+        body {
+            background-color: var(--primary-bg);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+
+        /* Навигация */
+        .navbar {
+            background-color: var(--navbar-bg) !important;
+        }
+
+        .navbar-brand, .nav-link {
+            color: var(--navbar-text) !important;
+        }
+
+        /* Футер */
+        .site-footer {
+            background-color: var(--footer-bg) !important;
+        }
+
+        .site-footer h4, .site-footer h6, .site-footer p, .site-footer a {
+            color: var(--footer-text) !important;
+        }
+
+        /* Переопределение стилей для контента страниц */
+        .section-padding, .bg-white, .about, .menu, .news, .newsletter, .contact, .news-detail, .comments, .related-news {
+            background-color: var(--section-bg) !important;
+            color: var(--section-text) !important;
+        }
+
+        h1, h2, h3, h4, h5, h6, p, a, .news-title-link, .hero-text, .text-white, .reviews-text, .form-label {
+            color: var(--section-text) !important;
+        }
+
+        .hero, .site-about-header, .site-contact-header, .site-menu-header, .site-news-header, .site-news-detail-header {
+            background-color: var(--section-bg) !important;
+        }
+
+        .overlay {
+            background-color: var(--overlay-bg) !important;
+        }
+
+        .carousel-caption, .c-reviews h4, .c-reviews p {
+            color: var(--hero-text) !important;
+        }
+
+        .menu-tag, .category-tag.bg-warning {
+            background-color: var(--menu-tag-bg) !important;
+        }
+
+        .price-tag, .price-tag.bg-white {
+            background-color: var(--price-tag-bg) !important;
+            color: var(--section-text) !important;
+        }
+
+        .category-tag.bg-danger, .category-tag.bg-info {
+            background-color: var(--news-tag-bg) !important;
+        }
+
+        .custom-form input, .custom-form textarea, .custom-form select {
+            background-color: var(--secondary-bg) !important;
+            color: var(--section-text) !important;
+            border-color: var(--section-text) !important;
+        }
+
+        .custom-form button {
+            background-color: var(--primary-color) !important;
+            color: var(--button-text) !important;
+        }
+
+        .news-author img, .team-image, .newsletter-image, .menu-image, .news-image {
+            filter: brightness(0.9); /* Небольшое затемнение изображений в темной теме */
+        }
+
+        [data-theme="dark"] .news-author img,
+        [data-theme="dark"] .team-image,
+        [data-theme="dark"] .newsletter-image,
+        [data-theme="dark"] .menu-image,
+        [data-theme="dark"] .news-image {
+            filter: brightness(0.7);
+        }
+
+        /* Стили для переключателя тем */
+        .theme-toggle {
+            cursor: pointer;
+            font-size: 20px;
+            color: var(--navbar-text);
+        }
+
+        /* Переопределение стилей модального окна */
+        .modal-content {
+            background-color: var(--primary-bg) !important;
+            color: var(--section-text) !important;
+        }
+
+        .modal-header, .modal-body, .modal-footer {
+            border-color: var(--section-text) !important;
+        }
+
+        .btn-close {
+            filter: invert(1); /* Для видимости кнопки закрытия в темной теме */
+        }
+
+        /* Стили для заголовка чат-бота */
+        .chatbot-title {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--section-text);
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <!-- Навигация -->
+    <nav class="navbar navbar-expand-lg bg-white shadow-lg">
+        <div class="container">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <a class="navbar-brand" href="{% url 'home' %}">Crispy Kitchen</a>
+
+            <div class="d-lg-none">
+                <button type="button" class="custom-btn btn btn-danger" data-bs-toggle="modal" data-bs-target="#BookingModal">Reservation</button>
+            </div>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == '/home' %}active{% endif %}" href="{% url 'home' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == '/menu/' %}active{% endif %}" href="{% url 'menu' %}">Menu</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == '/news/' %}active{% endif %}" href="{% url 'news' %}">Our Updates</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == '/contact/' %}active{% endif %}" href="{% url 'contact' %}">Contact</a>
+                    </li>
+                  <li class="nav-item">
+                        <a class="nav-link {% if request.path == '/quiz' %}active{% endif %}" href="{% url 'quiz' %}">Quiz</a>
+                    </li>
+                    <!-- Добавляем ссылки для авторизации -->
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'logout' %}">Logout ({{ user.username }})</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.path == '/login/' %}active{% endif %}" href="{% url 'login' %}">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.path == '/register/' %}active{% endif %}" href="{% url 'register' %}">Register</a>
+                        </li>
+                    {% endif %}
+                    <!-- Переключатель тем -->
+                    <li class="nav-item">
+                        <span class="nav-link theme-toggle" id="themeToggle">
+                            <i class="bi bi-moon"></i>
+                        </span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="d-none d-lg-block">
+                <button type="button" class="custom-btn btn btn-danger" data-bs-toggle="modal" data-bs-target="#BookingModal">Reservation</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Основной контент -->
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- Футер -->
+    <footer class="site-footer section-padding">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h4 class="text-white mb-4 me-5">Crispy Kitchen</h4>
+                </div>
+                <div class="col-lg-4 col-md-7 col-xs-12 tooplate-mt30">
+                    <h6 class="text-white mb-lg-4 mb-3">Location</h6>
+                    <p>Kazakhstan, city Almaty, Satpaeva 22</p>
+                    <a href="https://www.google.co.th/maps/place/Satpaev+St+22,+Almaty+050000/@43.2367527,76.9283671,737m/data=!3m2!1e3!4b1!4m6!3m5!1s0x38836eda14efc8cd:0x7707b47b04e18d24!8m2!3d43.2367527!4d76.930942!16s%2Fg%2F11nnttb29q?hl=en&entry=ttu&g_ep=EgoyMDI1MDQyMy4wIKXMDSoASAFQAw%3D%3D" class="custom-btn btn btn-dark mt-2">Directions</a>
+                </div>
+                <div class="col-lg-4 col-md-5 col-xs-12 tooplate-mt30">
+                    <h6 class="text-white mb-lg-4 mb-3">Opening Hours</h6>
+                    <p class="mb-2">Monday - Friday</p>
+                    <p>10:00 AM - 08:00 PM</p>
+                    <p>Tel: <a href="tel: 010-02-0340" class="tel-link">+7 707 328 09 48</a></p>
+                </div>
+                <div class="col-lg-4 col-md-6 col-xs-12 tooplate-mt30">
+                    <h6 class="text-white mb-lg-4 mb-3">Social</h6>
+                    <ul class="social-icon">
+                        <li><a href="#" class="social-icon-link bi-facebook"></a></li>
+                        <li><a href="https://www.instagram.com/kariiinall/" class="social-icon-link bi-instagram"></a></li>
+                        <li><a href="#" target="_blank" class="social-icon-link bi-twitter"></a></li>
+                        <li><a href="#" class="social-icon-link bi-youtube"></a></li>
+                    </ul>
+                    <p class="copyright-text tooplate-mt60"></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Заголовок для чат-бота -->
+    <div class="chatbot-title">Crispy Assistant</div>
+
+    <!-- Modal для бронирования -->
+    <div class="modal fade" id="BookingModal" tabindex="-1" aria-labelledby="BookingModal" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="mb-0">Reserve a table</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body d-flex flex-column justify-content-center">
+                    <div class="booking">
+                        <form class="booking-form row" role="form" action="#" method="post">
+                            {% csrf_token %}
+                            <div class="col-lg-6 col-12">
+                                <label for="name" class="form-label">Full Name</label>
+                                <input type="text" name="name" id="name" class="form-control" placeholder="Your Name" required>
+                            </div>
+                            <div class="col-lg-6 col-12">
+                                <label for="email" class="form-label">Email Address</label>
+                                <input type="email" name="email" id="email" pattern="[^ @]*@[^ @]*" class="form-control" placeholder="your@email.com" required>
+                            </div>
+                            <div class="col-lg-6 col-12">
+                                <label for="phone" class="form-label">Phone Number</label>
+                                <input type="telephone" name="phone" id="phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" class="form-control" placeholder="123-456-7890">
+                            </div>
+                            <div class="col-lg-6 col-12">
+                                <label for="people" class="form-label">Number of persons</label>
+                                <input type="text" name="people" id="people" class="form-control" placeholder="12 persons">
+                            </div>
+                            <div class="col-lg-6 col-12">
+                                <label for="date" class="form-label">Date</label>
+                                <input type="date" name="date" id="date" value="" class="form-control">
+                            </div>
+                            <div class="col-lg-6 col-12">
+                                <label for="time" class="form-label">Time</label>
+                                <select class="form-select form-control" name="time" id="time">
+                                    <option value="5" selected>5:00 PM</option>
+                                    <option value="6">6:00 PM</option>
+                                    <option value="7">7:00 PM</option>
+                                    <option value="8">8:00 PM</option>
+                                    <option value="9">9:00 PM</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label for="message" class="form-label">Special Request</label>
+                                <textarea class="form-control" rows="4" id="message" name="message" placeholder=""></textarea>
+                            </div>
+                            <div class="col-lg-4 col-12 ms-auto">
+                                <button type="submit" class="form-control">Submit Request</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript файлы -->
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/custom.js' %}"></script>
+    <!-- JavaScript для Chatbase чат-бота и переключения тем -->
+    <script>
+        const themeToggle = document.getElementById('themeToggle');
+        const htmlTheme = document.getElementById('html-theme');
+
+        // Загрузка темы из localStorage
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        htmlTheme.setAttribute('data-theme', savedTheme);
+        themeToggle.innerHTML = savedTheme === 'dark' ? '<i class="bi bi-sun"></i>' : '<i class="bi bi-moon"></i>';
+
+        // Переключение темы
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = htmlTheme.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            htmlTheme.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            themeToggle.innerHTML = newTheme === 'dark' ? '<i class="bi bi-sun"></i>' : '<i class="bi bi-moon"></i>';
+        });
+
+        // Chatbase чат-бот
+        (function(){if(!window.chatbase||window.chatbase("getState")!=="initialized"){window.chatbase=(...arguments)=>{if(!window.chatbase.q){window.chatbase.q=[]}window.chatbase.q.push(arguments)};window.chatbase=new Proxy(window.chatbase,{get(target,prop){if(prop==="q"){return target.q}return(...args)=>target(prop,...args)}})}const onLoad=function(){const script=document.createElement("script");script.src="https://www.chatbase.co/embed.min.js";script.id="RmDbNrYEImcuJINS_OGcR";script.domain="www.chatbase.co";document.body.appendChild(script)};if(document.readyState==="complete"){onLoad()}else{window.addEventListener("load",onLoad)}})();
+    </script>
+</body>
+</html>
