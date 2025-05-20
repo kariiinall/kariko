@@ -31,7 +31,6 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 INSTALLED_APPS = [
     'whitenoise.runserver_nostatic',  # Добавлено для whitenoise
-    'django.contrib.staticfiles',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
