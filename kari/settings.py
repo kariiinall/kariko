@@ -9,16 +9,15 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
-import os
+
 from pathlib import Path
 from decouple import config
-import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = config('SECRET_KEY', default='django-insecure-0dc-z8vbc-0aw41xyc@ehe1@7#mm59e0n^p9jttgw2^zks(w=*')
-DEBUG = config('DEBUG', default=True, cast=bool)
-ALLOWED_HOSTS = ['.railway.app', 'localhost']
+DEBUG = config('DEBUG', default=False, cast=bool)
+ALLOWED_HOSTS = ['web-production-d0e3.up.railway.app', 'localhost']
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 
@@ -27,7 +26,7 @@ ALLOWED_HOSTS = ['.railway.app', 'localhost']
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://web-production-3a083.up.railway.app',
+    'https://web-production-d0e3.up.railway.app',
 ]
 
 
@@ -83,8 +82,12 @@ WSGI_APPLICATION = 'kari.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
+
 DATABASES = {
-    'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
 
 
